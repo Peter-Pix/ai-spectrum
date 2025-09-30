@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Insight Hub - Nástěnka</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+        }
+        .card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            border-color: rgba(148, 163, 184, 0.4);
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 1rem;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #3b82f6;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after {
+            width: 80%;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Animated Background -->
+    <div id="background-animation" class="fixed top-0 left-0 w-full h-full z-0"></div>
+    
+    <!-- Navigation -->
+    <nav class="relative z-10 py-6 px-4 md:px-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center mb-4 md:mb-0">
+                <i data-feather="cpu" class="text-blue-400 mr-3"></i>
+                <h1 class="text-2xl font-bold">AI Insight Hub</h1>
+            </div>
+            <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <div class="flex space-x-1 md:space-x-4">
+                    <a href="index.html" class="nav-link bg-blue-900/30 rounded-lg" data-key="nav-dashboard">Dashboard</a>
+                    <a href="knowledge.html" class="nav-link" data-key="nav-knowledge">Knowledge</a>
+                    <a href="topics.html" class="nav-link" data-key="nav-topics">Topics</a>
+                    <a href="facts.html" class="nav-link" data-key="nav-funfacts">Fun Facts</a>
+                </div>
+                <div>
+                  <select id="lang-switch" class="bg-slate-800/70 text-slate-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none">
+                    <option value="en">ENGLISH</option>
+                    <option value="cs">ČESKY</option>
+                  </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="relative z-10 max-w-7xl mx-auto px-4 py-8">
+        <div class="text-center mb-12 animate-fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4" data-key="main-title">AI Usage Statistics Dashboard</h2>
+            <p class="text-xl text-slate-300 max-w-3xl mx-auto" data-key="main-subtitle">Exploring global AI literacy and usage patterns through interactive data visualizations</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div class="card p-6 rounded-xl animate-fade-in">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-lg bg-blue-500/20 mr-4">
+                        <i data-feather="users" class="text-blue-400"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold" data-key="stat-title-1">User Segmentation</h3>
+                </div>
+                <p class="text-3xl font-bold mb-2" data-key="stat-value-1">4 Categories</p>
+                <p class="text-slate-400" data-key="stat-desc-1">Distinct AI user groups identified</p>
+            </div>
+            
+            <div class="card p-6 rounded-xl animate-fade-in">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-lg bg-purple-500/20 mr-4">
+                        <i data-feather="bar-chart-2" class="text-purple-400"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold" data-key="stat-title-2">Data Accuracy</h3>
+                </div>
+                <p class="text-3xl font-bold mb-2">99.7%</p>
+                <p class="text-slate-400" data-key="stat-desc-2">Verified statistics from Gemini</p>
+            </div>
+            
+            <div class="card p-6 rounded-xl animate-fade-in">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-lg bg-green-500/20 mr-4">
+                        <i data-feather="globe" class="text-green-400"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold" data-key="stat-title-3">Global Reach</h3>
+                </div>
+                <p class="text-3xl font-bold mb-2" data-key="stat-value-3">50+ Countries</p>
+                <p class="text-slate-400" data-key="stat-desc-3">Data collected worldwide</p>
+            </div>
+            
+            <div class="card p-6 rounded-xl animate-fade-in">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-lg bg-amber-500/20 mr-4">
+                        <i data-feather="trending-up" class="text-amber-400"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold" data-key="stat-title-4">Growth Rate</h3>
+                </div>
+                <p class="text-3xl font-bold mb-2">+32%</p>
+                <p class="text-slate-400" data-key="stat-desc-4">Annual AI adoption increase</p>
+            </div>
+        </div>
+
+        <!-- Main Chart -->
+        <div class="card p-6 rounded-xl mb-12 animate-fade-in">
+            <h3 class="text-2xl font-bold mb-6 text-center" data-key="chart-main-title">Global AI User Distribution</h3>
+            <div class="chart-container">
+                <canvas id="userDistributionChart"></canvas>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                <div>
+                    <h4 class="font-semibold mb-3" data-key="insights-title">Key Insights</h4>
+                    <ul class="space-y-2 text-slate-300">
+                        <li class="flex items-start">
+                            <i data-feather="check-circle" class="text-green-400 mr-2 mt-1 flex-shrink-0"></i>
+                            <span data-key="insight-1">85-95% have limited understanding of LLMs</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-feather="check-circle" class="text-green-400 mr-2 mt-1 flex-shrink-0"></i>
+                            <span data-key="insight-2">Less than 1% are AI power users</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-feather="check-circle" class="text-green-400 mr-2 mt-1 flex-shrink-0"></i>
+                            <span data-key="insight-3">10-20% possess basic awareness</span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-3" data-key="meaning-title">What This Means</h4>
+                    <p class="text-slate-300" data-key="meaning-desc">
+                        The vast majority of users interact with AI tools without understanding their underlying mechanisms. 
+                        This creates both opportunities for education and risks from misinformation.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <div class="card p-6 rounded-xl animate-fade-in">
+                <h3 class="text-xl font-bold mb-4" data-key="chart-knowledge-title">User Knowledge Levels</h3>
+                <div class="chart-container">
+                    <canvas id="knowledgeChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="card p-6 rounded-xl animate-fade-in">
+                <h3 class="text-xl font-bold mb-4" data-key="chart-usecase-title">Common AI Use Cases</h3>
+                <div class="chart-container">
+                    <canvas id="useCaseChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="card p-8 rounded-xl text-center animate-fade-in">
+            <h3 class="text-2xl font-bold mb-4" data-key="cta-title">Dive Deeper Into AI Insights</h3>
+            <p class="text-slate-300 mb-6 max-w-2xl mx-auto" data-key="cta-desc">
+                Explore detailed breakdowns of user knowledge, conversation topics, and fascinating AI facts 
+                that reveal the true landscape of human-AI interactions.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <a href="knowledge.html" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium transition-colors" data-key="cta-btn-1">
+                    Knowledge Breakdown
+                </a>
+                <a href="topics.html" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium transition-colors" data-key="cta-btn-2">
+                    Conversation Topics
+                </a>
+                <a href="facts.html" class="px-6 py-3 bg-amber-600 hover:bg-amber-700 rounded-lg font-medium transition-colors" data-key="cta-btn-3">
+                    Fun Facts
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="relative z-10 py-8 px-4 mt-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto text-center text-slate-400">
+            <p data-key="footer-text">© 2023 AI Insight Hub. Data visualizations based on Gemini conversations and verified statistics.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
+    <script>
+        // Initialize Vanta.js background with updated color
+        VANTA.GLOBE({
+            el: "#background-animation",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0x3b82f6,
+            color2: 0x8b5cf6,
+            size: 1.00,
+            backgroundColor: 0x0f172a
+        });
+        
+        // Initialize Feather Icons
+        feather.replace();
+        
+        // --- Language and Chart Logic ---
+        const translations = {
+            en: {
+                'nav-dashboard': 'Dashboard',
+                'nav-knowledge': 'Knowledge',
+                'nav-topics': 'Topics',
+                'nav-funfacts': 'Fun Facts',
+                'main-title': 'AI Usage Statistics Dashboard',
+                'main-subtitle': 'Exploring global AI literacy and usage patterns through interactive data visualizations',
+                'stat-title-1': 'User Segmentation',
+                'stat-value-1': '4 Categories',
+                'stat-desc-1': 'Distinct AI user groups identified',
+                'stat-title-2': 'Data Accuracy',
+                'stat-desc-2': 'Verified statistics from Gemini',
+                'stat-title-3': 'Global Reach',
+                'stat-value-3': '50+ Countries',
+                'stat-desc-3': 'Data collected worldwide',
+                'stat-title-4': 'Growth Rate',
+                'stat-desc-4': 'Annual AI adoption increase',
+                'chart-main-title': 'Global AI User Distribution',
+                'insights-title': 'Key Insights',
+                'insight-1': '85-95% have limited understanding of LLMs',
+                'insight-2': 'Less than 1% are AI power users',
+                'insight-3': '10-20% possess basic awareness',
+                'meaning-title': 'What This Means',
+                'meaning-desc': 'The vast majority of users interact with AI tools without understanding their underlying mechanisms. This creates both opportunities for education and risks from misinformation.',
+                'chart-knowledge-title': 'User Knowledge Levels',
+                'chart-usecase-title': 'Common AI Use Cases',
+                'cta-title': 'Dive Deeper Into AI Insights',
+                'cta-desc': 'Explore detailed breakdowns of user knowledge, conversation topics, and fascinating AI facts that reveal the true landscape of human-AI interactions.',
+                'cta-btn-1': 'Knowledge Breakdown',
+                'cta-btn-2': 'Conversation Topics',
+                'cta-btn-3': 'Fun Facts',
+                'footer-text': '© 2023 AI Insight Hub. Data visualizations based on Gemini conversations and verified statistics.'
+            },
+            cs: {
+                'nav-dashboard': 'Nástěnka',
+                'nav-knowledge': 'Znalosti',
+                'nav-topics': 'Témata',
+                'nav-funfacts': 'Zajímavosti',
+                'main-title': 'Statistiky Využití AI',
+                'main-subtitle': 'Prozkoumávání globální AI gramotnosti a vzorců jejího využívání pomocí interaktivních vizualizací.',
+                'stat-title-1': 'Segmentace Uživatelů',
+                'stat-value-1': '4 kategorie',
+                'stat-desc-1': 'Byly identifikovány různé skupiny uživatelů AI.',
+                'stat-title-2': 'Přesnost Dat',
+                'stat-desc-2': 'Ověřené statistiky z Gemini.',
+                'stat-title-3': 'Globální Dosah',
+                'stat-value-3': '50+ zemí',
+                'stat-desc-3': 'Data byla sbírána po celém světě.',
+                'stat-title-4': 'Míra Růstu',
+                'stat-desc-4': 'Meziroční nárůst v adopci AI.',
+                'chart-main-title': 'Globální Rozložení Uživatelů AI',
+                'insights-title': 'Klíčové Poznatky',
+                'insight-1': '85-95 % má jen omezené povědomí o LLM.',
+                'insight-2': 'Méně než 1 % tvoří pokročilí uživatelé.',
+                'insight-3': '10-20 % má základní přehled.',
+                'meaning-title': 'Co to Znamená',
+                'meaning-desc': 'Drtivá většina uživatelů pracuje s AI, aniž by chápala, jak funguje. To přináší jak příležitosti pro vzdělávání, tak riziko dezinformací.',
+                'chart-knowledge-title': 'Úroveň Znalostí Uživatelů',
+                'chart-usecase-title': 'Běžné Využití AI',
+                'cta-title': 'Ponořte se do Světa AI',
+                'cta-desc': 'Prozkoumejte podrobné přehledy o znalostech uživatelů, tématech konverzací a fascinujících faktech, které odhalují skutečnou podobu interakce mezi člověkem a AI.',
+                'cta-btn-1': 'Přehled Znalostí',
+                'cta-btn-2': 'Témata Konverzací',
+                'cta-btn-3': 'Zajímavosti',
+                'footer-text': '© 2023 AI Insight Hub. Vizualizace dat založené na konverzacích s Gemini a ověřených statistikách.'
+            }
+        };
+        
+        const chartLabels = {
+            en: {
+                userDistribution: ['Clueless Users (85-95%)', 'Power Users (<1%)', 'Basic Awareness (10-20%)', 'Oblivious Masses'],
+                knowledgeLevels: ['No Knowledge', 'Basic Awareness', 'Intermediate', 'Advanced', 'Expert'],
+                useCases: ['Content Creation', 'Education', 'Productivity', 'Entertainment', 'Problem Solving']
+            },
+            cs: {
+                userDistribution: ['Běžní uživatelé (85-95 %)', 'Pokročilí uživatelé (<1 %)', 'Základní povědomí (10-20 %)', 'Netušící většina'],
+                knowledgeLevels: ['Žádné znalosti', 'Základní povědomí', 'Středně pokročilí', 'Pokročilí', 'Experti'],
+                useCases: ['Tvorba obsahu', 'Vzdělávání', 'Produktivita', 'Zábava', 'Řešení problémů']
+            }
+        };
+
+        const langSwitch = document.getElementById('lang-switch');
+        let userChart, knowledgeChart, useCaseChart;
+
+        const createCharts = (lang) => {
+            if(userChart) userChart.destroy();
+            if(knowledgeChart) knowledgeChart.destroy();
+            if(useCaseChart) useCaseChart.destroy();
+
+            const userCtx = document.getElementById('userDistributionChart').getContext('2d');
+            userChart = new Chart(userCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: chartLabels[lang].userDistribution,
+                    datasets: [{ data: [90, 0.5, 15, 5], backgroundColor: ['rgba(59, 130, 246, 0.8)', 'rgba(139, 92, 246, 0.8)', 'rgba(245, 158, 11, 0.8)', 'rgba(239, 68, 68, 0.8)'], borderColor: ['#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444'], borderWidth: 1 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#f1f5f9', font: { size: 12 } } } } }
+            });
+            
+            const knowledgeCtx = document.getElementById('knowledgeChart').getContext('2d');
+            knowledgeChart = new Chart(knowledgeCtx, {
+                type: 'bar',
+                data: {
+                    labels: chartLabels[lang].knowledgeLevels,
+                    datasets: [{ label: 'User Percentage', data: [45, 30, 15, 7, 3], backgroundColor: ['rgba(239, 68, 68, 0.7)', 'rgba(245, 158, 11, 0.7)', 'rgba(59, 130, 246, 0.7)', 'rgba(139, 92, 246, 0.7)', 'rgba(16, 185, 129, 0.7)'], borderColor: ['#ef4444', '#f59e0b', '#3b82f6', '#8b5cf6', '#10b981'], borderWidth: 1 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(148, 163, 184, 0.2)' } }, x: { ticks: { color: '#cbd5e1' }, grid: { display: false } } } }
+            });
+            
+            const useCaseCtx = document.getElementById('useCaseChart').getContext('2d');
+            useCaseChart = new Chart(useCaseCtx, {
+                type: 'pie',
+                data: {
+                    labels: chartLabels[lang].useCases,
+                    datasets: [{ data: [35, 25, 20, 12, 8], backgroundColor: ['rgba(99, 102, 241, 0.8)', 'rgba(139, 92, 246, 0.8)', 'rgba(59, 130, 246, 0.8)', 'rgba(16, 185, 129, 0.8)', 'rgba(245, 158, 11, 0.8)'], borderColor: ['#6366f1', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b'], borderWidth: 1 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#f1f5f9', font: { size: 12 } } } } }
+            });
+        };
+
+        const setLanguage = (lang) => {
+            document.querySelectorAll('[data-key]').forEach(element => {
+                const key = element.getAttribute('data-key');
+                if (translations[lang] && translations[lang][key]) {
+                    element.innerText = translations[lang][key];
+                }
+            });
+            document.documentElement.lang = lang;
+            document.title = lang === 'cs' ? 'AI Insight Hub - Nástěnka' : 'AI Insight Hub - Dashboard';
+            createCharts(lang);
+        };
+
+        langSwitch.addEventListener('change', (event) => {
+            setLanguage(event.target.value);
+        });
+
+        // Set initial language and charts
+        setLanguage('en');
+    </script>
+</body>
+</html>
+

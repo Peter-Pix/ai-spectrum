@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Insight Hub - Conversation Topics</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+        }
+        .card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            border-color: rgba(148, 163, 184, 0.4);
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 1rem;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #3b82f6;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after {
+            width: 80%;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .topic-card {
+            transition: all 0.3s ease;
+        }
+        .topic-card:hover {
+            transform: scale(1.02);
+        }
+        /* Mobile-friendly adjustment for navigation */
+        @media (max-width: 640px) {
+            .nav-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .nav-links-and-switch {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+            .nav-links {
+                flex-direction: column;
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+            .nav-link {
+                width: 100%;
+                text-align: center;
+                padding: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div id="background-animation" class="fixed top-0 left-0 w-full h-full z-0"></div>
+    
+    <nav class="relative z-10 py-6 px-4 md:px-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center nav-container">
+            <div class="flex items-center mb-4 md:mb-0">
+                <i data-feather="cpu" class="text-blue-400 mr-3"></i>
+                <h1 class="text-2xl font-bold">AI Insight Hub</h1>
+            </div>
+            <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 nav-links-and-switch">
+                <div class="flex space-x-1 md:space-x-4 nav-links">
+                    <a href="index.html" class="nav-link" data-key="nav-dashboard">Dashboard</a>
+                    <a href="knowledge.html" class="nav-link" data-key="nav-knowledge">Knowledge</a>
+                    <a href="topics.html" class="nav-link bg-blue-900/30 rounded-lg" data-key="nav-topics">Topics</a>
+                    <a href="facts.html" class="nav-link" data-key="nav-funfacts">Fun Facts</a>
+                </div>
+                <div>
+                  <select id="lang-switch" class="bg-slate-800/70 text-slate-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none">
+                    <option value="en">ENGLISH</option>
+                    <option value="cs">ČESKY</option>
+                  </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 max-w-7xl mx-auto px-4 py-8">
+        <div class="text-center mb-12 animate-fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4" data-key="main-title">AI Conversation Topics</h2>
+            <p class="text-xl text-slate-300 max-w-3xl mx-auto" data-key="main-subtitle">Analyzing the most common themes in human-AI interactions</p>
+        </div>
+
+        <div class="card p-6 rounded-xl mb-12 animate-fade-in">
+            <h3 class="text-2xl font-bold mb-6 text-center" data-key="chart-topic-title">Distribution of AI Conversation Topics</h3>
+            <div class="chart-container">
+                <canvas id="topicsChart"></canvas>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <div class="topic-card card p-6 rounded-xl animate-fade-in">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-lg bg-blue-500/20 mr-4">
+                        <i data-feather="book" class="text-blue-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold" data-key="cat-title-1">Education & Learning</h3>
+                </div>
+                <ul class="space-y-2 text-slate-300 mb-4">
+                    <li class="flex items-start">
+                        <i data-feather="chevron-right" class="text-blue-400 mr-2 mt-1 text-sm"></i>
+                        <span data-key="cat-item-1-1">Homework assistance</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i data-feather="chevron-right" class="text-blue-400 mr-2 mt-1 text-sm"></i>
+                        <span data-key="cat-item-1-2">Complex explanations (quantum physics, etc.)</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i data-feather="chevron-right" class="text-blue-400 mr-2 mt-1 text-sm"></i>
+                        <span data-key="cat-item-1-3">Article and document summarization</span>
+                    </li>
+                </ul>
+                <div class="mt-4 pt-4 border-t border-slate-700">
+                    <p class="text-sm text-slate-400">
+                        <span class="font-semibold text-blue-400">32%</span> <span data-key="cat-desc-1">of all AI interactions fall into this category</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="topic-card card p-6 rounded-xl animate-fade-in">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-lg bg-purple-500/20 mr-4">
+                        <i data-feather="edit" class="text-purple-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold" data-key="cat-title-2">Content Creation</h3>
+                </div>
+                <ul class="space-y-2 text-slate-300 mb-4">
+                    <li class="flex items-start">
+                        <i data-feather="chevron-right" class="text-purple-400 mr-2 mt-1 text-sm"></i>
+                        <span data-key="cat-item-2-1">Social media captions</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i data-feather="chevron-right" class="text-purple-400 mr-2 mt-1 text-sm"></i>
+                        <span data-key="cat-item-2-2">Blog post ideas and outlines</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i data-feather="chevron-right" class="text-purple-400 mr-2 mt-1 text-sm"></i>
+                        <span data-key="cat-item-2-3">Professional email drafting</span>
+                    </li>
+                </ul>
+                <div class="mt-4 pt-4 border-t border-slate-700">
+                    <p class="text-sm text-slate-400">
+                        <span class="font-semibold text-purple-400">28%</span> <span data-key="cat-desc-2">of all AI interactions fall into this category</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="topic-card card p-6 rounded-xl animate-fade-in">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-lg bg-amber-500/20 mr-4">
+                        <i data-feather="lightbulb" class="text-amber-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold" data-key="cat-title-3">Brainstorming</h3>
+                </div>
+                <ul class="space-y-2 text-slate-300 mb-4">
+                    <li class="flex items-start">
+                        <i data-feather="chevron-right" class="text-amber-400 mr-2 mt-1 text-sm"></i>
+                        <span data-key="cat-item-3-1">Travel planning ideas</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i data-feather="chevron-right" class="text-amber-400 mr-2 mt-1 text-sm"></i>
+                        <span data-key="cat-item-3-2">Meal planning and recipes</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i data-feather="chevron-right" class="text-amber-400 mr-2 mt-1 text-sm"></i>
+                        <span data-key="cat-item-3-3">Creative project concepts</span>
+                    </li>
+                </ul>
+                <div class="mt-4 pt-4 border-t border-slate-700">
+                    <p class="text-sm text-slate-400">
+                        <span class="font-semibold text-amber-400">18%</span> <span data-key="cat-desc-3">of all AI interactions fall into this category</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="topic-card card p-6 rounded-xl animate-fade-in">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-lg bg-green-500/20 mr-4">
+                        <i data-feather="heart" class="text-green-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold" data-key="cat-title-4">Emotional Support</h3>
+                </div>
+                <ul class="space-y-2 text-slate-300 mb-4">
+                    <li class="flex items-start">
+                        <i data-feather="chevron-right" class="text-green-400 mr-2 mt-1 text-sm"></i>
+                        <span data-key="cat-item-4-1">Relationship advice</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i data-feather="chevron-right" class="text-green-400 mr-2 mt-1 text-sm"></i>
+                        <span data-key="cat-item-4-2">Stress management and venting</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i data-feather="chevron-right" class="text-green-400 mr-2 mt-1 text-sm"></i>
+                        <span data-key="cat-item-4-3">Motivational support</span>
+                    </li>
+                </ul>
+                <div class="mt-4 pt-4 border-t border-slate-700">
+                    <p class="text-sm text-slate-400">
+                        <span class="font-semibold text-green-400">12%</span> <span data-key="cat-desc-4">of all AI interactions fall into this category</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="topic-card card p-6 rounded-xl animate-fade-in">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-lg bg-pink-500/20 mr-4">
+                        <i data-feather="pen-tool" class="text-pink-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold" data-key="cat-title-5">Creative Writing</h3>
+                </div>
+                <ul class="space-y-2 text-slate-300 mb-4">
+                    <li class="flex items-start">
+                        <i data-feather="chevron-right" class="text-pink-400 mr-2 mt-1 text-sm"></i>
+                        <span data-key="cat-item-5-1">Poetry composition</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i data-feather="chevron-right" class="text-pink-400 mr-2 mt-1 text-sm"></i>
+                        <span data-key="cat-item-5-2">Short story development</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i data-feather="chevron-right" class="text-pink-400 mr-2 mt-1 text-sm"></i>
+                        <span data-key="cat-item-5-3">Character creation</span>
+                    </li>
+                </ul>
+                <div class="mt-4 pt-4 border-t border-slate-700">
+                    <p class="text-sm text-slate-400">
+                        <span class="font-semibold text-pink-400">10%</span> <span data-key="cat-desc-5">of all AI interactions fall into this category</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="topic-card card p-6 rounded-xl animate-fade-in">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-lg bg-indigo-500/20 mr-4">
+                        <i data-feather="code" class="text-indigo-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold" data-key="cat-title-6">Technical Assistance</h3>
+                </div>
+                <ul class="space-y-2 text-slate-300 mb-4">
+                    <li class="flex items-start">
+                        <i data-feather="chevron-right" class="text-indigo-400 mr-2 mt-1 text-sm"></i>
+                        <span data-key="cat-item-6-1">Programming help and debugging</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i data-feather="chevron-right" class="text-indigo-400 mr-2 mt-1 text-sm"></i>
+                        <span data-key="cat-item-6-2">Technical documentation</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i data-feather="chevron-right" class="text-indigo-400 mr-2 mt-1 text-sm"></i>
+                        <span data-key="cat-item-6-3">System design advice</span>
+                    </li>
+                </ul>
+                <div class="mt-4 pt-4 border-t border-slate-700">
+                    <p class="text-sm text-slate-400">
+                        <span class="font-semibold text-indigo-400">8%</span> <span data-key="cat-desc-6">of all AI interactions fall into this category</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <div class="card p-6 rounded-xl animate-fade-in">
+                <h3 class="text-xl font-bold mb-4" data-key="chart-trends-title">Topic Trends Over Time</h3>
+                <div class="chart-container">
+                    <canvas id="trendsChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="card p-6 rounded-xl animate-fade-in">
+                <h3 class="text-xl font-bold mb-4" data-key="chart-demographics-title">User Demographics by Topic</h3>
+                <div class="chart-container">
+                    <canvas id="demographicsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="card p-8 rounded-xl animate-fade-in">
+            <h3 class="text-2xl font-bold mb-6 text-center" data-key="insights-section-title">Key Insights</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-bold text-lg mb-3" data-key="insight-1-title">Educational Dominance</h4>
+                    <p class="text-slate-300 mb-4" data-key="insight-1-desc">
+                        The prevalence of educational topics (32%) indicates that AI is primarily viewed as a learning tool. 
+                        Users frequently seek help with complex subjects and content summarization.
+                    </p>
+                    <div class="flex items-center p-3 bg-blue-900/20 rounded-lg">
+                        <i data-feather="trending-up" class="text-blue-400 mr-3"></i>
+                        <span data-key="insight-1-stat">Learning assistance increased by 45% in 2023</span>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-3" data-key="insight-2-title">Creative Expression</h4>
+                    <p class="text-slate-300 mb-4" data-key="insight-2-desc">
+                        Content creation and creative writing account for 38% of interactions, showing that users 
+                        value AI as a collaborative creative partner rather than just a tool.
+                    </p>
+                    <div class="flex items-center p-3 bg-purple-900/20 rounded-lg">
+                        <i data-feather="users" class="text-purple-400 mr-3"></i>
+                        <span data-key="insight-2-stat">67% of creative users are aged 18-34</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="relative z-10 py-8 px-4 mt-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto text-center text-slate-400">
+            <p data-key="footer-text">© 2023 AI Insight Hub. Data visualizations based on Gemini conversations and verified statistics.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"></script>
+    <script>
+        // Initialize Vanta.js background
+        VANTA.CLOUDS({
+            el: "#background-animation",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            backgroundColor: 0xf1f5f9,
+            skyColor: 0x1e293b,
+            cloudColor: 0x3b82f6,
+            cloudShadowColor: 0x0f172a,
+            sunColor: 0xf59e0b,
+            sunGlareColor: 0xfbbf24,
+            sunlightColor: 0xfde68a,
+            speed: 0.50
+        });
+        
+        // Initialize Feather Icons
+        feather.replace();
+        
+        // --- Language and Chart Logic ---
+        const translations = {
+            en: {
+                'nav-dashboard': 'Dashboard',
+                'nav-knowledge': 'Knowledge',
+                'nav-topics': 'Topics',
+                'nav-funfacts': 'Fun Facts',
+                'main-title': 'AI Conversation Topics',
+                'main-subtitle': 'Analyzing the most common themes in human-AI interactions',
+                'chart-topic-title': 'Distribution of AI Conversation Topics',
+                'cat-title-1': 'Education & Learning',
+                'cat-item-1-1': 'Homework assistance',
+                'cat-item-1-2': 'Complex explanations (quantum physics, etc.)',
+                'cat-item-1-3': 'Article and document summarization',
+                'cat-desc-1': 'of all AI interactions fall into this category',
+                'cat-title-2': 'Content Creation',
+                'cat-item-2-1': 'Social media captions',
+                'cat-item-2-2': 'Blog post ideas and outlines',
+                'cat-item-2-3': 'Professional email drafting',
+                'cat-desc-2': 'of all AI interactions fall into this category',
+                'cat-title-3': 'Brainstorming',
+                'cat-item-3-1': 'Travel planning ideas',
+                'cat-item-3-2': 'Meal planning and recipes',
+                'cat-item-3-3': 'Creative project concepts',
+                'cat-desc-3': 'of all AI interactions fall into this category',
+                'cat-title-4': 'Emotional Support',
+                'cat-item-4-1': 'Relationship advice',
+                'cat-item-4-2': 'Stress management and venting',
+                'cat-item-4-3': 'Motivational support',
+                'cat-desc-4': 'of all AI interactions fall into this category',
+                'cat-title-5': 'Creative Writing',
+                'cat-item-5-1': 'Poetry composition',
+                'cat-item-5-2': 'Short story development',
+                'cat-item-5-3': 'Character creation',
+                'cat-desc-5': 'of all AI interactions fall into this category',
+                'cat-title-6': 'Technical Assistance',
+                'cat-item-6-1': 'Programming help and debugging',
+                'cat-item-6-2': 'Technical documentation',
+                'cat-item-6-3': 'System design advice',
+                'cat-desc-6': 'of all AI interactions fall into this category',
+                'chart-trends-title': 'Topic Trends Over Time',
+                'chart-demographics-title': 'User Demographics by Topic',
+                'insights-section-title': 'Key Insights',
+                'insight-1-title': 'Educational Dominance',
+                'insight-1-desc': 'The prevalence of educational topics (32%) indicates that AI is primarily viewed as a learning tool. Users frequently seek help with complex subjects and content summarization.',
+                'insight-1-stat': 'Learning assistance increased by 45% in 2023',
+                'insight-2-title': 'Creative Expression',
+                'insight-2-desc': 'Content creation and creative writing account for 38% of interactions, showing that users value AI as a collaborative creative partner rather than just a tool.',
+                'insight-2-stat': '67% of creative users are aged 18-34',
+                'footer-text': '© 2023 AI Insight Hub. Data visualizations based on Gemini conversations and verified statistics.'
+            },
+            cs: {
+                'nav-dashboard': 'Nástěnka',
+                'nav-knowledge': 'Znalosti',
+                'nav-topics': 'Témata',
+                'nav-funfacts': 'Zajímavosti',
+                'main-title': 'Témata Konverzací s AI',
+                'main-subtitle': 'Analýza nejčastějších témat v interakcích mezi člověkem a AI',
+                'chart-topic-title': 'Rozložení Téma Konverzací s AI',
+                'cat-title-1': 'Vzdělávání a Učení',
+                'cat-item-1-1': 'Pomoc s domácími úkoly',
+                'cat-item-1-2': 'Vysvětlení složitých témat (kvantová fyzika atd.)',
+                'cat-item-1-3': 'Shrnutí článků a dokumentů',
+                'cat-desc-1': 'ze všech interakcí s AI spadá do této kategorie',
+                'cat-title-2': 'Tvorba Obsahu',
+                'cat-item-2-1': 'Popisky pro sociální média',
+                'cat-item-2-2': 'Nápady a osnovy pro blogové příspěvky',
+                'cat-item-2-3': 'Návrhy profesionálních e-mailů',
+                'cat-desc-2': 'ze všech interakcí s AI spadá do této kategorie',
+                'cat-title-3': 'Brainstorming',
+                'cat-item-3-1': 'Nápady pro plánování cest',
+                'cat-item-3-2': 'Plánování jídelníčku a recepty',
+                'cat-item-3-3': 'Koncepty kreativních projektů',
+                'cat-desc-3': 'ze všech interakcí s AI spadá do této kategorie',
+                'cat-title-4': 'Emocionální Podpora',
+                'cat-item-4-1': 'Rady ohledně vztahů',
+                'cat-item-4-2': 'Zvládání stresu a ventilace pocitů',
+                'cat-item-4-3': 'Motivační podpora',
+                'cat-desc-4': 'ze všech interakcí s AI spadá do této kategorie',
+                'cat-title-5': 'Kreativní Psaní',
+                'cat-item-5-1': 'Skládání poezie',
+                'cat-item-5-2': 'Vývoj krátkých povídek',
+                'cat-item-5-3': 'Tvorba postav',
+                'cat-desc-5': 'ze všech interakcí s AI spadá do této kategorie',
+                'cat-title-6': 'Technická Pomoc',
+                'cat-item-6-1': 'Pomoc s programováním a laděním',
+                'cat-item-6-2': 'Technická dokumentace',
+                'cat-item-6-3': 'Poradenství v oblasti návrhu systémů',
+                'cat-desc-6': 'ze všech interakcí s AI spadá do této kategorie',
+                'chart-trends-title': 'Trendy Témat v Čase',
+                'chart-demographics-title': 'Demografie Uživatelů Podle Tématu',
+                'insights-section-title': 'Klíčové Poznatky',
+                'insight-1-title': 'Dominance Vzdělávání',
+                'insight-1-desc': 'Převaha vzdělávacích témat (32 %) ukazuje, že AI je vnímána primárně jako nástroj pro učení. Uživatelé často vyhledávají pomoc se složitými předměty a shrnutím obsahu.',
+                'insight-1-stat': 'Pomoc s učením vzrostla v roce 2023 o 45 %',
+                'insight-2-title': 'Kreativní Exprese',
+                'insight-2-desc': 'Tvorba obsahu a kreativní psaní tvoří 38 % interakcí, což naznačuje, že uživatelé vnímají AI jako spolupracujícího kreativního partnera, nikoli jen nástroj.',
+                'insight-2-stat': '67 % kreativních uživatelů je ve věku 18–34 let',
+                'footer-text': '© 2023 AI Insight Hub. Vizualizace dat založené na konverzacích s Gemini a ověřených statistikách.'
+            }
+        };
+
+        const chartLabels = {
+            en: {
+                topics: ['Education & Learning', 'Content Creation', 'Brainstorming', 'Emotional Support', 'Creative Writing', 'Technical Assistance'],
+                trends: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: ['Education', 'Content Creation', 'Emotional Support']
+                },
+                demographics: {
+                    labels: ['18-24', '25-34', '35-44', '45-54', '55-64', '65+'],
+                    datasets: ['Education', 'Content Creation', 'Emotional Support']
+                }
+            },
+            cs: {
+                topics: ['Vzdělávání a Učení', 'Tvorba Obsahu', 'Brainstorming', 'Emocionální Podpora', 'Kreativní Psaní', 'Technická Pomoc'],
+                trends: {
+                    labels: ['Led', 'Úno', 'Bře', 'Dub', 'Kvě', 'Čer', 'Čec', 'Srp', 'Zář', 'Říj', 'Lis', 'Pro'],
+                    datasets: ['Vzdělávání', 'Tvorba Obsahu', 'Emocionální Podpora']
+                },
+                demographics: {
+                    labels: ['18-24', '25-34', '35-44', '45-54', '55-64', '65+'],
+                    datasets: ['Vzdělávání', 'Tvorba Obsahu', 'Emocionální Podpora']
+                }
+            }
+        };
+
+        const langSwitch = document.getElementById('lang-switch');
+        let topicsChart, trendsChart, demographicsChart;
+
+        const createCharts = (lang) => {
+            if(topicsChart) topicsChart.destroy();
+            if(trendsChart) trendsChart.destroy();
+            if(demographicsChart) demographicsChart.destroy();
+            
+            const labels = chartLabels[lang];
+            const datasetColors = {
+                'Education': 'rgba(59, 130, 246, 1)',
+                'Vzdělávání': 'rgba(59, 130, 246, 1)',
+                'Content Creation': 'rgba(139, 92, 246, 1)',
+                'Tvorba Obsahu': 'rgba(139, 92, 246, 1)',
+                'Emotional Support': 'rgba(16, 185, 129, 1)',
+                'Emocionální Podpora': 'rgba(16, 185, 129, 1)'
+            };
+            const backgroundColors = {
+                'Education': 'rgba(59, 130, 246, 0.7)',
+                'Vzdělávání': 'rgba(59, 130, 246, 0.7)',
+                'Content Creation': 'rgba(139, 92, 246, 0.7)',
+                'Tvorba Obsahu': 'rgba(139, 92, 246, 0.7)',
+                'Emotional Support': 'rgba(16, 185, 129, 0.7)',
+                'Emocionální Podpora': 'rgba(16, 185, 129, 0.7)'
+            };
+            const topicColors = [
+                'rgba(59, 130, 246, 0.8)', // Education
+                'rgba(139, 92, 246, 0.8)', // Content Creation
+                'rgba(245, 158, 11, 0.8)', // Brainstorming
+                'rgba(16, 185, 129, 0.8)', // Emotional Support
+                'rgba(236, 72, 153, 0.8)', // Creative Writing
+                'rgba(99, 102, 241, 0.8)'  // Technical Assistance
+            ];
+            const topicBorderColors = [
+                'rgba(59, 130, 246, 1)',
+                'rgba(139, 92, 246, 1)',
+                'rgba(245, 158, 11, 1)',
+                'rgba(16, 185, 129, 1)',
+                'rgba(236, 72, 153, 1)',
+                'rgba(99, 102, 241, 1)'
+            ];
+
+
+            // Topics Chart
+            const topicsCtx = document.getElementById('topicsChart').getContext('2d');
+            topicsChart = new Chart(topicsCtx, {
+                type: 'polarArea',
+                data: {
+                    labels: labels.topics,
+                    datasets: [{
+                        data: [32, 28, 18, 12, 10, 8],
+                        backgroundColor: topicColors,
+                        borderColor: topicBorderColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: '#f1f5f9',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            ticks: {
+                                backdropColor: 'transparent',
+                                color: '#94a3b8'
+                            },
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.2)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Trends Chart
+            const trendsCtx = document.getElementById('trendsChart').getContext('2d');
+            trendsChart = new Chart(trendsCtx, {
+                type: 'line',
+                data: {
+                    labels: labels.trends.labels,
+                    datasets: [
+                        {
+                            label: labels.trends.datasets[0],
+                            data: [28, 29, 30, 31, 32, 33, 32, 31, 32, 33, 34, 32],
+                            borderColor: datasetColors[labels.trends.datasets[0]],
+                            backgroundColor: datasetColors[labels.trends.datasets[0]].replace('1)', '0.2)'),
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: labels.trends.datasets[1],
+                            data: [25, 26, 27, 27, 28, 28, 28, 29, 28, 28, 29, 28],
+                            borderColor: datasetColors[labels.trends.datasets[1]],
+                            backgroundColor: datasetColors[labels.trends.datasets[1]].replace('1)', '0.2)'),
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: labels.trends.datasets[2],
+                            data: [8, 9, 10, 10, 11, 11, 12, 12, 12, 12, 12, 12],
+                            borderColor: datasetColors[labels.trends.datasets[2]],
+                            backgroundColor: datasetColors[labels.trends.datasets[2]].replace('1)', '0.2)'),
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#cbd5e1'
+                            },
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.2)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#cbd5e1'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#f1f5f9'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Demographics Chart
+            const demographicsCtx = document.getElementById('demographicsChart').getContext('2d');
+            demographicsChart = new Chart(demographicsCtx, {
+                type: 'bar',
+                data: {
+                    labels: labels.demographics.labels,
+                    datasets: [
+                        {
+                            label: labels.demographics.datasets[0],
+                            data: [45, 35, 25, 20, 15, 10],
+                            backgroundColor: backgroundColors[labels.demographics.datasets[0]],
+                            borderColor: datasetColors[labels.demographics.datasets[0]],
+                            borderWidth: 1
+                        },
+                        {
+                            label: labels.demographics.datasets[1],
+                            data: [50, 45, 30, 25, 20, 15],
+                            backgroundColor: backgroundColors[labels.demographics.datasets[1]],
+                            borderColor: datasetColors[labels.demographics.datasets[1]],
+                            borderWidth: 1
+                        },
+                        {
+                            label: labels.demographics.datasets[2],
+                            data: [20, 25, 30, 35, 40, 45],
+                            backgroundColor: backgroundColors[labels.demographics.datasets[2]],
+                            borderColor: datasetColors[labels.demographics.datasets[2]],
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#f1f5f9'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true,
+                            ticks: {
+                                color: '#cbd5e1'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            stacked: true,
+                            ticks: {
+                                color: '#cbd5e1'
+                            },
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.2)'
+                            }
+                        }
+                    }
+                }
+            });
+        };
+
+        const setLanguage = (lang) => {
+            document.querySelectorAll('[data-key]').forEach(element => {
+                const key = element.getAttribute('data-key');
+                if (translations[lang] && translations[lang][key]) {
+                    element.innerText = translations[lang][key];
+                }
+            });
+            document.documentElement.lang = lang;
+            document.title = lang === 'cs' ? 'AI Insight Hub - Témata Konverzací' : 'AI Insight Hub - Conversation Topics';
+            createCharts(lang);
+        };
+
+        langSwitch.addEventListener('change', (event) => {
+            setLanguage(event.target.value);
+        });
+
+        // Set initial language and charts
+        setLanguage('en');
+    </script>
+</body>
+</html>

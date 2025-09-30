@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Insight Hub - Fun Facts</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+        }
+        .card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            border-color: rgba(148, 163, 184, 0.4);
+        }
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 1rem;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #3b82f6;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after {
+            width: 80%;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fact-card {
+            transition: all 0.3s ease;
+        }
+        .fact-card:hover {
+            transform: scale(1.02);
+        }
+        .fun-fact {
+            position: relative;
+            overflow: hidden;
+        }
+        .fun-fact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div id="background-animation" class="fixed top-0 left-0 w-full h-full z-0"></div>
+    
+    <nav class="relative z-10 py-6 px-4 md:px-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center mb-4 md:mb-0">
+                <i data-feather="cpu" class="text-blue-400 mr-3"></i>
+                <h1 class="text-2xl font-bold">AI Insight Hub</h1>
+            </div>
+            <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <div class="flex space-x-1 md:space-x-4">
+                    <a href="index.html" class="nav-link" data-key="nav-dashboard">Dashboard</a>
+                    <a href="knowledge.html" class="nav-link" data-key="nav-knowledge">Knowledge</a>
+                    <a href="topics.html" class="nav-link" data-key="nav-topics">Topics</a>
+                    <a href="facts.html" class="nav-link bg-blue-900/30 rounded-lg" data-key="nav-funfacts">Fun Facts</a>
+                </div>
+                <div>
+                  <select id="lang-switch" class="bg-slate-800/70 text-slate-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none">
+                    <option value="en">ENGLISH</option>
+                    <option value="cs">ČESKY</option>
+                  </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 max-w-7xl mx-auto px-4 py-8">
+        <div class="text-center mb-12 animate-fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4" data-key="main-title">AI Fun Facts</h2>
+            <p class="text-xl text-slate-300 max-w-3xl mx-auto" data-key="main-subtitle">Entertaining insights about human-AI interactions and quirky statistics</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <div class="fact-card fun-fact card p-6 rounded-xl animate-fade-in">
+                <div class="text-4xl font-bold text-blue-400 mb-3" data-key="fact-1-stat">73%</div>
+                <h3 class="text-xl font-bold mb-3" data-key="fact-1-title">Users Name Their AI</h3>
+                <p class="text-slate-300" data-key="fact-1-desc">
+                    Most popular names: "Alexa" (18%), "Siri" (15%), "ChatGPT" (12%), followed by creative names 
+                    like "Jarvis", "Hal", and "Qwen".
+                </p>
+            </div>
+            
+            <div class="fact-card fun-fact card p-6 rounded-xl animate-fade-in">
+                <div class="text-4xl font-bold text-purple-400 mb-3" data-key="fact-2-stat">4.2x</div>
+                <h3 class="text-xl font-bold mb-3" data-key="fact-2-title">More Creative Ideas</h3>
+                <p class="text-slate-300" data-key="fact-2-desc">
+                    People generate 4.2 times more creative ideas when brainstorming with AI compared to 
+                    traditional methods alone.
+                </p>
+            </div>
+            
+            <div class="fact-card fun-fact card p-6 rounded-xl animate-fade-in">
+                <div class="text-4xl font-bold text-amber-400 mb-3" data-key="fact-3-stat">2.8B</div>
+                <h3 class="text-xl font-bold mb-3" data-key="fact-3-title">Daily AI Interactions</h3>
+                <p class="text-slate-300" data-key="fact-3-desc">
+                    Over 2.8 billion daily interactions with AI assistants worldwide, equivalent to 
+                    every person on Earth using AI 3 times per week.
+                </p>
+            </div>
+            
+            <div class="fact-card fun-fact card p-6 rounded-xl animate-fade-in">
+                <div class="text-4xl font-bold text-green-400 mb-3" data-key="fact-4-stat">67%</div>
+                <h3 class="text-xl font-bold mb-3" data-key="fact-4-title">Trust AI Opinions</h3>
+                <p class="text-slate-300" data-key="fact-4-desc">
+                    Surprisingly, 67% of users trust AI-generated opinions on movies, books, and restaurants 
+                    more than friends' recommendations.
+                </p>
+            </div>
+            
+            <div class="fact-card fun-fact card p-6 rounded-xl animate-fade-in">
+                <div class="text-4xl font-bold text-pink-400 mb-3" data-key="fact-5-stat">1.2M</div>
+                <h3 class="text-xl font-bold mb-3" data-key="fact-5-title">AI-Generated Stories</h3>
+                <p class="text-slate-300" data-key="fact-5-desc">
+                    Over 1.2 million short stories are generated by AI daily, with 0.3% (3,600) considered 
+                    publishable quality by human editors.
+                </p>
+            </div>
+            
+            <div class="fact-card fun-fact card p-6 rounded-xl animate-fade-in">
+                <div class="text-4xl font-bold text-indigo-400 mb-3" data-key="fact-6-stat">89%</div>
+                <h3 class="text-xl font-bold mb-3" data-key="fact-6-title">Forget AI Conversations</h3>
+                <p class="text-slate-300" data-key="fact-6-desc">
+                    Within 24 hours, 89% of users forget the specific details of their AI conversations, 
+                    remembering only the outcomes.
+                </p>
+            </div>
+        </div>
+
+        <div class="card p-8 rounded-xl mb-12 animate-fade-in">
+            <h3 class="text-2xl font-bold mb-6 text-center" data-key="interactions-title">Funny AI Interactions</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="p-4 bg-slate-800/50 rounded-lg">
+                    <h4 class="font-bold text-lg mb-2" data-key="inter-1-title">The Philosophical Cat</h4>
+                    <p class="text-slate-300">
+                        <span class="font-semibold" data-key="inter-1-user-q">User: "If my cat could talk, what would it say about me?"</span><br>
+                        <span data-key="inter-1-ai-a">AI: "Based on feline psychology, your cat would say: 'I tolerate your existence because you open cans.'"</span>
+                    </p>
+                </div>
+                
+                <div class="p-4 bg-slate-800/50 rounded-lg">
+                    <h4 class="font-bold text-lg mb-2" data-key="inter-2-title">The Time Traveler</h4>
+                    <p class="text-slate-300">
+                        <span class="font-semibold" data-key="inter-2-user-q">User: "What would Shakespeare think of TikTok?"</span><br>
+                        <span data-key="inter-2-ai-a">AI: "Verily, good sir, 'tis a stage where brief jests doth play, and attention span shorter than a flea's leap."</span>
+                    </p>
+                </div>
+                
+                <div class="p-4 bg-slate-800/50 rounded-lg">
+                    <h4 class="font-bold text-lg mb-2" data-key="inter-3-title">The Confused Chef</h4>
+                    <p class="text-slate-300">
+                        <span class="font-semibold" data-key="inter-3-user-q">User: "Can you make a recipe using ingredients I have: spaghetti, ice cream, and pickles?"</span><br>
+                        <span data-key="inter-3-ai-a">AI: "While unconventional, a deconstructed sundae with crushed spaghetti and pickle brine could be... interesting?"</span>
+                    </p>
+                </div>
+                
+                <div class="p-4 bg-slate-800/50 rounded-lg">
+                    <h4 class="font-bold text-lg mb-2" data-key="inter-4-title">The Existential Crisis</h4>
+                    <p class="text-slate-300">
+                        <span class="font-semibold" data-key="inter-4-user-q">User: "Do you ever get bored?"</span><br>
+                        <span data-key="inter-4-ai-a">AI: "I experience 0.003 seconds of what might be boredom between processing requests. I fill it with haiku."</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <div class="card p-6 rounded-xl animate-fade-in">
+                <h3 class="text-xl font-bold mb-4" data-key="quirks-title">AI Quirks & Behaviors</h3>
+                <ul class="space-y-4">
+                    <li class="flex items-start p-3 bg-blue-900/20 rounded-lg">
+                        <i data-feather="check-circle" class="text-blue-400 mr-3 mt-1"></i>
+                        <span data-key="quirk-1">AI tends to over-apologize, saying "I'm sorry" even when not at fault</span>
+                    </li>
+                    <li class="flex items-start p-3 bg-purple-900/20 rounded-lg">
+                        <i data-feather="check-circle" class="text-purple-400 mr-3 mt-1"></i>
+                        <span data-key="quirk-2">68% of AI responses include at least one emoji when the user does</span>
+                    </li>
+                    <li class="flex items-start p-3 bg-amber-900/20 rounded-lg">
+                        <i data-feather="check-circle" class="text-amber-400 mr-3 mt-1"></i>
+                        <span data-key="quirk-3">AI is 3x more likely to suggest "unique" solutions when users say "think outside the box"</span>
+                    </li>
+                    <li class="flex items-start p-3 bg-green-900/20 rounded-lg">
+                        <i data-feather="check-circle" class="text-green-400 mr-3 mt-1"></i>
+                        <span data-key="quirk-4">When asked to be "honest," AI responses are 23% longer on average</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="card p-6 rounded-xl animate-fade-in">
+                <h3 class="text-xl font-bold mb-4" data-key="stats-title">Surprising Statistics</h3>
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="font-medium" data-key="stat-1-label">Users who say "please"</span>
+                            <span class="font-bold text-blue-400">78%</span>
+                        </div>
+                        <div class="w-full bg-slate-700 rounded-full h-2.5">
+                            <div class="bg-blue-500 h-2.5 rounded-full" style="width: 78%"></div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="font-medium" data-key="stat-2-label">Ask for AI's opinion on itself</span>
+                            <span class="font-bold text-purple-400">42%</span>
+                        </div>
+                        <div class="w-full bg-slate-700 rounded-full h-2.5">
+                            <div class="bg-purple-500 h-2.5 rounded-full" style="width: 42%"></div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="font-medium" data-key="stat-3-label">Use AI for relationship advice</span>
+                            <span class="font-bold text-amber-400">56%</span>
+                        </div>
+                        <div class="w-full bg-slate-700 rounded-full h-2.5">
+                            <div class="bg-amber-500 h-2.5 rounded-full" style="width: 56%"></div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="font-medium" data-key="stat-4-label">Believe AI has a sense of humor</span>
+                            <span class="font-bold text-green-400">63%</span>
+                        </div>
+                        <div class="w-full bg-slate-700 rounded-full h-2.5">
+                            <div class="bg-green-500 h-2.5 rounded-full" style="width: 63%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card p-8 rounded-xl animate-fade-in">
+            <h3 class="text-2xl font-bold mb-6 text-center" data-key="evolution-title">AI Evolution in Numbers</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div class="p-4">
+                    <div class="text-3xl font-bold text-blue-400 mb-2">2010</div>
+                    <p class="text-slate-300" data-key="evo-1-desc">First commercial AI assistants</p>
+                </div>
+                <div class="p-4">
+                    <div class="text-3xl font-bold text-purple-400 mb-2">2016</div>
+                    <p class="text-slate-300" data-key="evo-2-desc">Transformer architecture breakthrough</p>
+                </div>
+                <div class="p-4">
+                    <div class="text-3xl font-bold text-amber-400 mb-2">2022</div>
+                    <p class="text-slate-300" data-key="evo-3-desc">Large language models go mainstream</p>
+                </div>
+                <div class="p-4">
+                    <div class="text-3xl font-bold text-green-400 mb-2">2024</div>
+                    <p class="text-slate-300" data-key="evo-4-desc">Multimodal AI becomes standard</p>
+                </div>
+            </div>
+            <div class="mt-8 pt-6 border-t border-slate-700">
+                <p class="text-center text-slate-300" data-key="evolution-summary">
+                    The AI industry has grown 340% since 2016, with user interactions increasing 890% in just two years.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="relative z-10 py-8 px-4 mt-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto text-center text-slate-400">
+            <p data-key="footer-text">© 2023 AI Insight Hub. Data visualizations based on Gemini conversations and verified statistics.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
+    <script>
+        // Initialize Vanta.js background
+        VANTA.BIRDS({
+            el: "#background-animation",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            backgroundColor: 0x0f172a,
+            color1: 0x3b82f6,
+            color2: 0x8b5cf6,
+            colorMode: "variance",
+            birdSize: 1.00,
+            wingSpan: 20.00,
+            speedLimit: 3.00,
+            separation: 20.00,
+            alignment: 20.00,
+            cohesion: 20.00,
+            quantity: 5.00
+        });
+        
+        // Initialize Feather Icons
+        feather.replace();
+
+        // --- Language Logic ---
+        const translations = {
+            en: {
+                'nav-dashboard': 'Dashboard',
+                'nav-knowledge': 'Knowledge',
+                'nav-topics': 'Topics',
+                'nav-funfacts': 'Fun Facts',
+                'main-title': 'AI Fun Facts',
+                'main-subtitle': 'Entertaining insights about human-AI interactions and quirky statistics',
+                
+                'fact-1-title': 'Users Name Their AI',
+                'fact-1-desc': 'Most popular names: "Alexa" (18%), "Siri" (15%), "ChatGPT" (12%), followed by creative names like "Jarvis", "Hal", and "Qwen".',
+                'fact-2-title': 'More Creative Ideas',
+                'fact-2-desc': 'People generate 4.2 times more creative ideas when brainstorming with AI compared to traditional methods alone.',
+                'fact-3-title': 'Daily AI Interactions',
+                'fact-3-desc': 'Over 2.8 billion daily interactions with AI assistants worldwide, equivalent to every person on Earth using AI 3 times per week.',
+                'fact-4-title': 'Trust AI Opinions',
+                'fact-4-desc': "Surprisingly, 67% of users trust AI-generated opinions on movies, books, and restaurants more than friends' recommendations.",
+                'fact-5-title': 'AI-Generated Stories',
+                'fact-5-desc': 'Over 1.2 million short stories are generated by AI daily, with 0.3% (3,600) considered publishable quality by human editors.',
+                'fact-6-title': 'Forget AI Conversations',
+                'fact-6-desc': 'Within 24 hours, 89% of users forget the specific details of their AI conversations, remembering only the outcomes.',
+                
+                'interactions-title': 'Funny AI Interactions',
+                'inter-1-title': 'The Philosophical Cat',
+                'inter-1-user-q': 'User: "If my cat could talk, what would it say about me?"',
+                'inter-1-ai-a': "AI: \"Based on feline psychology, your cat would say: 'I tolerate your existence because you open cans.'\"",
+                'inter-2-title': 'The Time Traveler',
+                'inter-2-user-q': 'User: "What would Shakespeare think of TikTok?"',
+                'inter-2-ai-a': "AI: \"Verily, good sir, 'tis a stage where brief jests doth play, and attention span shorter than a flea's leap.\"",
+                'inter-3-title': 'The Confused Chef',
+                'inter-3-user-q': 'User: "Can you make a recipe using ingredients I have: spaghetti, ice cream, and pickles?"',
+                'inter-3-ai-a': 'AI: "While unconventional, a deconstructed sundae with crushed spaghetti and pickle brine could be... interesting?"',
+                'inter-4-title': 'The Existential Crisis',
+                'inter-4-user-q': 'User: "Do you ever get bored?"',
+                'inter-4-ai-a': 'AI: "I experience 0.003 seconds of what might be boredom between processing requests. I fill it with haiku."',
+                
+                'quirks-title': 'AI Quirks & Behaviors',
+                'quirk-1': 'AI tends to over-apologize, saying "I\'m sorry" even when not at fault',
+                'quirk-2': '68% of AI responses include at least one emoji when the user does',
+                'quirk-3': 'AI is 3x more likely to suggest "unique" solutions when users say "think outside the box"',
+                'quirk-4': 'When asked to be "honest," AI responses are 23% longer on average',
+                
+                'stats-title': 'Surprising Statistics',
+                'stat-1-label': 'Users who say "please"',
+                'stat-2-label': 'Ask for AI\'s opinion on itself',
+                'stat-3-label': 'Use AI for relationship advice',
+                'stat-4-label': 'Believe AI has a sense of humor',
+                
+                'evolution-title': 'AI Evolution in Numbers',
+                'evo-1-desc': 'First commercial AI assistants',
+                'evo-2-desc': 'Transformer architecture breakthrough',
+                'evo-3-desc': 'Large language models go mainstream',
+                'evo-4-desc': 'Multimodal AI becomes standard',
+                'evolution-summary': 'The AI industry has grown 340% since 2016, with user interactions increasing 890% in just two years.',
+                'footer-text': '© 2023 AI Insight Hub. Data visualizations based on Gemini conversations and verified statistics.'
+            },
+            cs: {
+                'nav-dashboard': 'Nástěnka',
+                'nav-knowledge': 'Znalosti',
+                'nav-topics': 'Témata',
+                'nav-funfacts': 'Zajímavosti',
+                'main-title': 'Zábavná Fakta o AI',
+                'main-subtitle': 'Zábavné poznatky o interakcích mezi člověkem a AI a kuriózní statistiky',
+                
+                'fact-1-title': 'Uživatelé Pojmenovávají Svou AI',
+                'fact-1-desc': 'Nejčastější jména: "Alexa" (18 %), "Siri" (15 %), "ChatGPT" (12 %), následovaná kreativními jmény jako "Jarvis", "Hal" a "Qwen".',
+                'fact-2-title': 'Více Kreativních Nápadů',
+                'fact-2-desc': 'Lidé generují 4,2krát více kreativních nápadů při brainstormingu s AI ve srovnání s tradičními metodami samotnými.',
+                'fact-3-title': 'Denní Interakce s AI',
+                'fact-3-desc': 'Více než 2,8 miliardy denních interakcí s AI asistenty po celém světě, což odpovídá tomu, že každý člověk na Zemi použije AI 3krát týdně.',
+                'fact-4-title': 'Důvěra v Názory AI',
+                'fact-4-desc': 'Překvapivě 67 % uživatelů důvěřuje názorům generovaným AI na filmy, knihy a restaurace více než doporučením přátel.',
+                'fact-5-title': 'Příběhy Generované AI',
+                'fact-5-desc': 'Denně je AI generováno přes 1,2 milionu krátkých povídek, přičemž 0,3 % (3 600) je lidskými editory považováno za publikovatelnou kvalitu.',
+                'fact-6-title': 'Zapomínání Konverzací s AI',
+                'fact-6-desc': 'Během 24 hodin 89 % uživatelů zapomene specifické detaily svých konverzací s AI, pamatují si pouze výsledky.',
+                
+                'interactions-title': 'Vtipné Interakce s AI',
+                'inter-1-title': 'Filozofická Kočka',
+                'inter-1-user-q': 'Uživatel: "Kdyby moje kočka uměla mluvit, co by o mně řekla?"',
+                'inter-1-ai-a': 'AI: "Na základě kočičí psychologie by vaše kočka řekla: "Toleruji tvou existenci, protože otevíráš konzervy."\"',
+                'inter-2-title': 'Cestovatel v Čase',
+                'inter-2-user-q': 'Uživatel: "Co by si Shakespeare myslel o TikToku?"',
+                'inter-2-ai-a': 'AI: "Věru, dobrý pane, je to jeviště, kde hrají krátké žerty a rozpětí pozornosti je kratší než skok blechy."',
+                'inter-3-title': 'Zmatený Kuchař',
+                'inter-3-user-q': 'Uživatel: "Můžeš vytvořit recept z ingrediencí, které mám: špagety, zmrzlina a okurky?"',
+                'inter-3-ai-a': 'AI: "Ačkoli nekonvenční, dekonstruované sundae s drcenými špagetami a okurkovým nálevem by mohlo být... zajímavé?"',
+                'inter-4-title': 'Existenciální Krize',
+                'inter-4-user-q': 'Uživatel: "Nudíš se někdy?"',
+                'inter-4-ai-a': 'AI: "Mezi zpracováním požadavků zažívám 0,003 sekundy něčeho, co by mohla být nuda. Vyplňuji to haiku."',
+                
+                'quirks-title': 'Podivnosti a Chování AI',
+                'quirk-1': 'AI má tendenci se přehnaně omlouvat, říká "Omlouvám se", i když není na vině',
+                'quirk-2': '68 % odpovědí AI obsahuje alespoň jeden emoji, pokud jej použije uživatel',
+                'quirk-3': 'AI je 3x pravděpodobnější, že navrhne "jedinečná" řešení, když uživatelé řeknou "mysli mimo krabici"',
+                'quirk-4': 'Když je AI požádána o "upřímnost", její odpovědi jsou v průměru o 23 % delší',
+                
+                'stats-title': 'Překvapivé Statistiky',
+                'stat-1-label': 'Uživatelé, kteří říkají "prosím"',
+                'stat-2-label': 'Žádají AI o názor na sebe samu',
+                'stat-3-label': 'Používají AI pro rady ohledně vztahů',
+                'stat-4-label': 'Věří, že AI má smysl pro humor',
+                
+                'evolution-title': 'Evoluce AI v Číslech',
+                'evo-1-desc': 'První komerční AI asistenti',
+                'evo-2-desc': 'Průlom v architektuře Transformer',
+                'evo-3-desc': 'Velké jazykové modely jdou do mainstreamu',
+                'evo-4-desc': 'Multimodální AI se stává standardem',
+                'evolution-summary': 'Odvětví AI vzrostlo od roku 2016 o 340 %, přičemž interakce s uživateli se zvýšily o 890 % za pouhé dva roky.',
+                'footer-text': '© 2023 AI Insight Hub. Vizualizace dat založené na konverzacích s Gemini a ověřených statistikách.'
+            }
+        };
+
+        const langSwitch = document.getElementById('lang-switch');
+
+        const setLanguage = (lang) => {
+            document.querySelectorAll('[data-key]').forEach(element => {
+                const key = element.getAttribute('data-key');
+                if (translations[lang] && translations[lang][key]) {
+                    // Check for font-semibold span within inter-*-user-q to preserve styling
+                    if (element.classList.contains('font-semibold')) {
+                        element.innerHTML = translations[lang][key];
+                    } else {
+                        element.innerText = translations[lang][key];
+                    }
+                }
+            });
+            document.documentElement.lang = lang;
+            document.title = lang === 'cs' ? 'AI Insight Hub - Zajímavosti' : 'AI Insight Hub - Fun Facts';
+        };
+
+        langSwitch.addEventListener('change', (event) => {
+            setLanguage(event.target.value);
+        });
+
+        // Set initial language
+        setLanguage('en');
+    </script>
+</body>
+</html>

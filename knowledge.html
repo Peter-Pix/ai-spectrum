@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Insight Hub - Knowledge Breakdown</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+        }
+        .card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            border-color: rgba(148, 163, 184, 0.4);
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 1rem;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #3b82f6;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after {
+            width: 80%;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .knowledge-level {
+            border-left: 4px solid;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Animated Background -->
+    <div id="background-animation" class="fixed top-0 left-0 w-full h-full z-0"></div>
+    
+    <!-- Navigation -->
+    <nav class="relative z-10 py-6 px-4 md:px-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center mb-4 md:mb-0">
+                <i data-feather="cpu" class="text-blue-400 mr-3"></i>
+                <h1 class="text-2xl font-bold">AI Insight Hub</h1>
+            </div>
+            <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <div class="flex space-x-1 md:space-x-4">
+                    <a href="index.html" class="nav-link" data-key="nav-dashboard">Dashboard</a>
+                    <a href="knowledge.html" class="nav-link bg-blue-900/30 rounded-lg" data-key="nav-knowledge">Knowledge</a>
+                    <a href="topics.html" class="nav-link" data-key="nav-topics">Topics</a>
+                    <a href="facts.html" class="nav-link" data-key="nav-funfacts">Fun Facts</a>
+                </div>
+                <div>
+                  <select id="lang-switch" class="bg-slate-800/70 text-slate-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none">
+                    <option value="en">ENGLISH</option>
+                    <option value="cs">ČESKY</option>
+                  </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="relative z-10 max-w-7xl mx-auto px-4 py-8">
+        <div class="text-center mb-12 animate-fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4" data-key="main-title">User Knowledge Breakdown</h2>
+            <p class="text-xl text-slate-300 max-w-3xl mx-auto" data-key="main-subtitle">Understanding the spectrum of AI awareness and comprehension</p>
+        </div>
+
+        <!-- Knowledge Levels -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <div class="card p-6 rounded-xl animate-fade-in">
+                <h3 class="text-2xl font-bold mb-6" data-key="segment-title">Knowledge Segmentation</h3>
+                <div class="space-y-6">
+                    <div class="knowledge-level border-blue-500 pl-4 py-2">
+                        <h4 class="font-bold text-lg" data-key="level-1-title">Clueless Users (85-95%)</h4>
+                        <p class="text-slate-300 mt-2" data-key="level-1-desc">
+                            These users interact with AI tools daily but have little to no understanding of how they work. 
+                            They may know about interfaces like ChatGPT but are unaware of concepts like neural networks, 
+                            training data, or tokenization.
+                        </p>
+                    </div>
+                    
+                    <div class="knowledge-level border-purple-500 pl-4 py-2">
+                        <h4 class="font-bold text-lg" data-key="level-2-title">Power Users (&lt;1%)</h4>
+                        <p class="text-slate-300 mt-2" data-key="level-2-desc">
+                            A small elite group with deep technical understanding of AI systems. They comprehend 
+                            transformer architectures, can fine-tune models, and understand the mathematical foundations 
+                            of machine learning.
+                        </p>
+                    </div>
+                    
+                    <div class="knowledge-level border-amber-500 pl-4 py-2">
+                        <h4 class="font-bold text-lg" data-key="level-3-title">Basic Awareness (10-20%)</h4>
+                        <p class="text-slate-300 mt-2" data-key="level-3-desc">
+                            Users with surface-level understanding. They know AI can generate text and images, 
+                            understand basic limitations, but lack deeper technical knowledge. They can effectively 
+                            use prompts but don't understand the underlying mechanisms.
+                        </p>
+                    </div>
+                    
+                    <div class="knowledge-level border-red-500 pl-4 py-2">
+                        <h4 class="font-bold text-lg" data-key="level-4-title">Oblivious Masses</h4>
+                        <p class="text-slate-300 mt-2" data-key="level-4-desc">
+                            Users who are either unaware of AI capabilities or completely dismiss them. They may 
+                            believe AI is just "fancy autocomplete" or fear it as a job-stealing threat without 
+                            understanding its actual applications.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card p-6 rounded-xl animate-fade-in">
+                <h3 class="text-2xl font-bold mb-6" data-key="skills-fears-title">Skills vs. Fears</h3>
+                <div class="chart-container mb-6">
+                    <canvas id="skillsFearsChart"></canvas>
+                </div>
+                <div class="mt-6">
+                    <h4 class="font-bold text-lg mb-3" data-key="observations-title">Key Observations</h4>
+                    <ul class="space-y-3 text-slate-300">
+                        <li class="flex items-start">
+                            <i data-feather="arrow-up-circle" class="text-green-400 mr-2 mt-1"></i>
+                            <span data-key="obs-1">Users with higher skills tend to have more realistic expectations</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-feather="arrow-down-circle" class="text-red-400 mr-2 mt-1"></i>
+                            <span data-key="obs-2">Fears are often based on misconceptions rather than actual capabilities</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-feather="trending-up" class="text-blue-400 mr-2 mt-1"></i>
+                            <span data-key="obs-3">Education correlates with more productive AI usage</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            <div class="card p-6 rounded-xl animate-fade-in">
+                <h3 class="text-xl font-bold mb-4" data-key="chart-age-title">Knowledge by Age Group</h3>
+                <div class="chart-container">
+                    <canvas id="ageKnowledgeChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="card p-6 rounded-xl animate-fade-in">
+                <h3 class="text-xl font-bold mb-4" data-key="chart-depth-title">Understanding Depth</h3>
+                <div class="chart-container">
+                    <canvas id="understandingChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="card p-6 rounded-xl animate-fade-in">
+                <h3 class="text-xl font-bold mb-4" data-key="chart-myths-title">Misconceptions vs Reality</h3>
+                <div class="chart-container">
+                    <canvas id="misconceptionsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Insights Section -->
+        <div class="card p-8 rounded-xl animate-fade-in">
+            <h3 class="text-2xl font-bold mb-6 text-center" data-key="insights-title">Key Insights & Recommendations</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="text-center p-4">
+                    <div class="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-feather="book-open" class="text-blue-400 text-2xl"></i>
+                    </div>
+                    <h4 class="font-bold text-lg mb-2" data-key="insight-1-title">Education Gap</h4>
+                    <p class="text-slate-300" data-key="insight-1-desc">
+                        There's a significant gap between AI usage and understanding. Educational initiatives 
+                        could bridge this divide.
+                    </p>
+                </div>
+                
+                <div class="text-center p-4">
+                    <div class="w-16 h-16 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-feather="shield" class="text-purple-400 text-2xl"></i>
+                    </div>
+                    <h4 class="font-bold text-lg mb-2" data-key="insight-2-title">Security Concerns</h4>
+                    <p class="text-slate-300" data-key="insight-2-desc">
+                        Users with limited knowledge are more susceptible to misinformation and privacy risks 
+                        when using AI tools.
+                    </p>
+                </div>
+                
+                <div class="text-center p-4">
+                    <div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-feather="trending-up" class="text-green-400 text-2xl"></i>
+                    </div>
+                    <h4 class="font-bold text-lg mb-2" data-key="insight-3-title">Growth Opportunity</h4>
+                    <p class="text-slate-300" data-key="insight-3-desc">
+                        The large basic awareness group represents a significant opportunity for deeper 
+                        engagement and skill development.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="relative z-10 py-8 px-4 mt-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto text-center text-slate-400">
+            <p data-key="footer-text">© 2023 AI Insight Hub. Data visualizations based on Gemini conversations and verified statistics.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
+    <script>
+        // Initialize Vanta.js background
+        VANTA.WAVES({
+            el: "#background-animation",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0x0f172a,
+            shininess: 15.00,
+            waveHeight: 15.00,
+            waveSpeed: 0.75,
+            zoom: 0.75
+        });
+        
+        // Initialize Feather Icons
+        feather.replace();
+        
+        const translations = {
+            en: {
+                'nav-dashboard': 'Dashboard',
+                'nav-knowledge': 'Knowledge',
+                'nav-topics': 'Topics',
+                'nav-funfacts': 'Fun Facts',
+                'main-title': 'User Knowledge Breakdown',
+                'main-subtitle': 'Understanding the spectrum of AI awareness and comprehension',
+                'segment-title': 'Knowledge Segmentation',
+                'level-1-title': 'Clueless Users (85-95%)',
+                'level-1-desc': 'These users interact with AI tools daily but have little to no understanding of how they work. They may know about interfaces like ChatGPT but are unaware of concepts like neural networks, training data, or tokenization.',
+                'level-2-title': 'Power Users (<1%)',
+                'level-2-desc': 'A small elite group with deep technical understanding of AI systems. They comprehend transformer architectures, can fine-tune models, and understand the mathematical foundations of machine learning.',
+                'level-3-title': 'Basic Awareness (10-20%)',
+                'level-3-desc': "Users with surface-level understanding. They know AI can generate text and images, understand basic limitations, but lack deeper technical knowledge. They can effectively use prompts but don't understand the underlying mechanisms.",
+                'level-4-title': 'Oblivious Masses',
+                'level-4-desc': 'Users who are either unaware of AI capabilities or completely dismiss them. They may believe AI is just "fancy autocomplete" or fear it as a job-stealing threat without understanding its actual applications.',
+                'skills-fears-title': 'Skills vs. Fears',
+                'observations-title': 'Key Observations',
+                'obs-1': 'Users with higher skills tend to have more realistic expectations',
+                'obs-2': 'Fears are often based on misconceptions rather than actual capabilities',
+                'obs-3': 'Education correlates with more productive AI usage',
+                'chart-age-title': 'Knowledge by Age Group',
+                'chart-depth-title': 'Understanding Depth',
+                'chart-myths-title': 'Misconceptions vs Reality',
+                'insights-title': 'Key Insights & Recommendations',
+                'insight-1-title': 'Education Gap',
+                'insight-1-desc': "There's a significant gap between AI usage and understanding. Educational initiatives could bridge this divide.",
+                'insight-2-title': 'Security Concerns',
+                'insight-2-desc': 'Users with limited knowledge are more susceptible to misinformation and privacy risks when using AI tools.',
+                'insight-3-title': 'Growth Opportunity',
+                'insight-3-desc': 'The large basic awareness group represents a significant opportunity for deeper engagement and skill development.',
+                'footer-text': '© 2023 AI Insight Hub. Data visualizations based on Gemini conversations and verified statistics.'
+            },
+            cs: {
+                'nav-dashboard': 'Nástěnka',
+                'nav-knowledge': 'Znalosti',
+                'nav-topics': 'Témata',
+                'nav-funfacts': 'Zajímavosti',
+                'main-title': 'Přehled Znalostí Uživatelů',
+                'main-subtitle': 'Porozumění spektru povědomí a chápání umělé inteligence',
+                'segment-title': 'Segmentace Znalostí',
+                'level-1-title': 'Běžní uživatelé (85-95 %)',
+                'level-1-desc': 'Tito uživatelé denně interagují s nástroji AI, ale mají malé nebo žádné tušení, jak fungují. Mohou znát rozhraní jako ChatGPT, ale neznají pojmy jako neuronové sítě, trénovací data nebo tokenizace.',
+                'level-2-title': 'Pokročilí uživatelé (<1 %)',
+                'level-2-desc': 'Malá elitní skupina s hlubokým technickým porozuměním systémům AI. Chápou architektury transformerů, umí ladit modely a rozumí matematickým základům strojového učení.',
+                'level-3-title': 'Základní Povědomí (10-20 %)',
+                'level-3-desc': 'Uživatelé s povrchním chápáním. Vědí, že AI umí generovat text a obrázky, chápou základní omezení, ale chybí jim hlubší technické znalosti. Umí efektivně používat prompty, ale nerozumí mechanismům v pozadí.',
+                'level-4-title': 'Netušící Většina',
+                'level-4-desc': "Uživatelé, kteří si buď neuvědomují schopnosti AI, nebo je zcela odmítají. Mohou se domnívat, že AI je jen 'lepší našeptávač', nebo se jí obávají jako hrozby kradoucí práci, aniž by chápali její skutečné využití.",
+                'skills-fears-title': 'Dovednosti vs. Obavy',
+                'observations-title': 'Klíčová Zjištění',
+                'obs-1': 'Uživatelé s vyššími dovednostmi mívají realističtější očekávání.',
+                'obs-2': 'Obavy jsou často založeny na mylných představách, nikoli na skutečných schopnostech.',
+                'obs-3': 'Vzdělání souvisí s produktivnějším využíváním AI.',
+                'chart-age-title': 'Znalosti podle věkových skupin',
+                'chart-depth-title': 'Hloubka Porozumění',
+                'chart-myths-title': 'Mýty vs. Realita',
+                'insights-title': 'Klíčové Postřehy a Doporučení',
+                'insight-1-title': 'Mezera ve Vzdělání',
+                'insight-1-desc': 'Existuje značný rozdíl mezi používáním a chápáním AI. Vzdělávací iniciativy by mohly tuto propast překlenout.',
+                'insight-2-title': 'Bezpečnostní Obavy',
+                'insight-2-desc': 'Uživatelé s omezenými znalostmi jsou náchylnější k dezinformacím a rizikům ohrožení soukromí při používání nástrojů AI.',
+                'insight-3-title': 'Příležitost k Růstu',
+                'insight-3-desc': 'Velká skupina se základním povědomím představuje významnou příležitost pro hlubší zapojení a rozvoj dovedností.',
+                'footer-text': '© 2023 AI Insight Hub. Vizualizace dat založené na konverzacích s Gemini a ověřených statistikách.'
+            }
+        };
+
+        const chartLabels = {
+            en: {
+                skillsFears: {
+                    labels: ['Prompt Engineering', 'Technical Knowledge', 'Ethical Awareness', 'Security Understanding', 'Creative Application'],
+                    datasets: ['Actual Skills', 'Perceived Fears']
+                },
+                ageKnowledge: {
+                    dataset: 'AI Knowledge Level'
+                },
+                understanding: {
+                    labels: ['Terminology', 'Mechanisms', 'Limitations', 'Applications', 'Ethics'],
+                    dataset: 'Understanding Depth (%)'
+                },
+                misconceptions: ['AI Will Replace All Jobs', 'AI is Conscious', 'AI is Always Accurate', 'AI Can Predict Future', 'AI Understands Emotions']
+            },
+            cs: {
+                skillsFears: {
+                    labels: ['Tvorba promptů', 'Technické znalosti', 'Etické povědomí', 'Bezpečnostní chápání', 'Kreativní aplikace'],
+                    datasets: ['Skutečné dovednosti', 'Vnímané obavy']
+                },
+                ageKnowledge: {
+                    dataset: 'Úroveň znalostí AI'
+                },
+                understanding: {
+                    labels: ['Terminologie', 'Mechanismy', 'Omezení', 'Aplikace', 'Etika'],
+                    dataset: 'Hloubka porozumění (%)'
+                },
+                misconceptions: ['AI nahradí všechna pracovní místa', 'AI má vědomí', 'AI je vždy přesná', 'AI umí předpovídat budoucnost', 'AI rozumí emocím']
+            }
+        };
+
+        const langSwitch = document.getElementById('lang-switch');
+        let skillsChart, ageChart, understandingChart, misconceptionsChart;
+
+        const createCharts = (lang) => {
+            if (skillsChart) skillsChart.destroy();
+            if (ageChart) ageChart.destroy();
+            if (understandingChart) understandingChart.destroy();
+            if (misconceptionsChart) misconceptionsChart.destroy();
+
+            const skillsCtx = document.getElementById('skillsFearsChart').getContext('2d');
+            skillsChart = new Chart(skillsCtx, {
+                type: 'radar',
+                data: {
+                    labels: chartLabels[lang].skillsFears.labels,
+                    datasets: [
+                        { label: chartLabels[lang].skillsFears.datasets[0], data: [70, 20, 45, 30, 60], backgroundColor: 'rgba(59, 130, 246, 0.2)', borderColor: '#3b82f6', pointBackgroundColor: '#3b82f6', pointBorderColor: '#fff', pointHoverBackgroundColor: '#fff', pointHoverBorderColor: '#3b82f6' },
+                        { label: chartLabels[lang].skillsFears.datasets[1], data: [30, 80, 65, 75, 40], backgroundColor: 'rgba(239, 68, 68, 0.2)', borderColor: '#ef4444', pointBackgroundColor: '#ef4444', pointBorderColor: '#fff', pointHoverBackgroundColor: '#fff', pointHoverBorderColor: '#ef4444' }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { r: { angleLines: { color: 'rgba(148, 163, 184, 0.2)' }, grid: { color: 'rgba(148, 163, 184, 0.2)' }, pointLabels: { color: '#cbd5e1' }, ticks: { backdropColor: 'transparent', color: '#94a3b8' } } }, plugins: { legend: { labels: { color: '#f1f5f9' } } } }
+            });
+            
+            const ageCtx = document.getElementById('ageKnowledgeChart').getContext('2d');
+            ageChart = new Chart(ageCtx, {
+                type: 'line',
+                data: {
+                    labels: ['18-24', '25-34', '35-44', '45-54', '55-64', '65+'],
+                    datasets: [{ label: chartLabels[lang].ageKnowledge.dataset, data: [65, 58, 45, 35, 25, 15], borderColor: '#8b5cf6', backgroundColor: 'rgba(139, 92, 246, 0.2)', tension: 0.3, fill: true }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(148, 163, 184, 0.2)' } }, x: { ticks: { color: '#cbd5e1' }, grid: { display: false } } }, plugins: { legend: { labels: { color: '#f1f5f9' } } } }
+            });
+            
+            const understandingCtx = document.getElementById('understandingChart').getContext('2d');
+            understandingChart = new Chart(understandingCtx, {
+                type: 'bar',
+                data: {
+                    labels: chartLabels[lang].understanding.labels,
+                    datasets: [{ label: chartLabels[lang].understanding.dataset, data: [45, 20, 35, 60, 30], backgroundColor: ['rgba(99, 102, 241, 0.7)', 'rgba(59, 130, 246, 0.7)', 'rgba(139, 92, 246, 0.7)', 'rgba(16, 185, 129, 0.7)', 'rgba(245, 158, 11, 0.7)'], borderColor: ['#6366f1', '#3b82f6', '#8b5cf6', '#10b981', '#f59e0b'], borderWidth: 1 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(148, 163, 184, 0.2)' } }, x: { ticks: { color: '#cbd5e1' }, grid: { display: false } } } }
+            });
+            
+            const misconceptionsCtx = document.getElementById('misconceptionsChart').getContext('2d');
+            misconceptionsChart = new Chart(misconceptionsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: chartLabels[lang].misconceptions,
+                    datasets: [{ data: [72, 58, 65, 45, 50], backgroundColor: ['rgba(239, 68, 68, 0.8)', 'rgba(245, 158, 11, 0.8)', 'rgba(59, 130, 246, 0.8)', 'rgba(139, 92, 246, 0.8)', 'rgba(16, 185, 129, 0.8)'], borderColor: ['#ef4444', '#f59e0b', '#3b82f6', '#8b5cf6', '#10b981'], borderWidth: 1 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#f1f5f9', font: { size: 10 } } } } }
+            });
+        };
+
+        const setLanguage = (lang) => {
+            document.querySelectorAll('[data-key]').forEach(element => {
+                const key = element.getAttribute('data-key');
+                if (translations[lang] && translations[lang][key]) {
+                    element.innerText = translations[lang][key];
+                }
+            });
+            document.documentElement.lang = lang;
+            document.title = lang === 'cs' ? 'AI Insight Hub - Přehled Znalostí' : 'AI Insight Hub - Knowledge Breakdown';
+            createCharts(lang);
+        };
+
+        langSwitch.addEventListener('change', (event) => {
+            setLanguage(event.target.value);
+        });
+
+        // Set initial language and charts
+        setLanguage('en');
+    </script>
+</body>
+</html>
